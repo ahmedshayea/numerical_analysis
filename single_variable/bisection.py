@@ -45,6 +45,9 @@ def num_of_iterations(a: float, b: float, to_decimal_digit: int):
 
     Note: I had to use abs ( absolute value) of the below equation because it produces
     negative value, currently I am not sure why , but I will look into it later.
+
+    Note: b - a must be wrapped insdie abs ( absolute value ) to tolerate with cases where b is less than a
+    which produce a negative result and negative results doesn't have log!. 
     """
     epsilon = 10 ** (-to_decimal_digit)
     return round((log(abs(b - a)) - log(epsilon)) / log(2))
