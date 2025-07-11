@@ -9,7 +9,7 @@ you must define the function 'f' as regular python function ( def f(x): ... ).
 """
 
 from typing import Literal
-from math import log, cos
+from math import log, cos, sqrt
 
 
 signType = Literal["negative", "positive"]
@@ -57,9 +57,9 @@ def solve_with_bisection(
     f, a, b, to_decimal_digit: int = 10,
 ):
     """
-    solve given on variable equation by using bisection numerical method.
-
-    parameters:
+    solve a single-variable equation by using bisection method, approximate the solution 
+    up to 'to_decimal_digit'
+parameters:
         f: function to solve, must be a single variable Function
 
         a: left bound of the interval
@@ -78,15 +78,20 @@ def solve_with_bisection(
 
     Note:
         this function uses recursion to find the solution,
-        if you don't know what recursion is, it is simply the functio calling itslef
+        if you don't know what recursion is, it is simply the function calling itslef
         with different parameters until it reaches a base case,
         when it do reach the base case ( when it finds the solution in this case ),
         it will return that solution and stop calling itself.
     """
+
+    # Find center point c
     c = (a + b) / 2
 
+    print("c = ", c)
+
+    # This is recursion base case ( f(c) == 0 ) 
     if round(f(c), to_decimal_digit) == 0:
-        return round(c, to_decimal_digit)
+        return c
 
     assert validate_ab_value(f, a, b)
     a_sign = get_sign(f, a)
@@ -101,6 +106,9 @@ def solve_with_bisection(
     )
 
 
+def f(x):
+    return (x**4) + 4*(x**2) - 10
+
 # Sample functions to test the bisection method
 def f1(x):
     return (x**2) + x - 3
@@ -113,19 +121,24 @@ def f2(x):
 def f3(x):
     return cos(x) - x
 
+def excer(x: float) -> float:
+    return sqrt(x) - cos(x)
+
 
 def main():
     # define bounds for the bisection method
     a = 0
     b = 1
 
-    to_decimal_digit = 3
+    to_decimal_digit = 2
 
-    c = solve_with_bisection(f2, a, b, to_decimal_digit)
+    c = solve_with_bisection(excer, a, b, to_decimal_digit)
+    n = num_of_iterations(a, b, to_decimal_digit)
 
     print("Solution is: ", c)
-    print("Number of iterations: ", num_of_iterations(a, b, to_decimal_digit))
-    print("Function at c:  ", f2(c))
+    print("Number of iterations: ", n)
+    print("Function at c:  ", excer(c))
+    print(f"b - a / 2^{n} = ", (b - a) / 2**n)
 
 
 if __name__ == "__main__":
